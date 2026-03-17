@@ -1,8 +1,5 @@
 # MasjidBoard Live for Home Assistant
 
-[![HACS Validation](https://github.com/yusuff/masjidboard-hass/actions/workflows/validate.yml/badge.svg)](https://github.com/yusuff/masjidboard-hass/actions/workflows/validate.yml)
-[![Lint](https://github.com/yusuff/masjidboard-hass/actions/workflows/lint.yml/badge.svg)](https://github.com/yusuff/masjidboard-hass/actions/workflows/lint.yml)
-
 A Home Assistant custom integration that fetches prayer times from [MasjidBoard Live](https://masjidboardlive.com) for your local masjid.
 
 ## Features
