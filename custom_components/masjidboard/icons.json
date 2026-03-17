@@ -1,0 +1,69 @@
+{
+    "entity": {
+        "sensor": {
+            "sehriEnds": {
+                "default": "mdi:food-halal"
+            },
+            "fajrAthan": {
+                "default": "mdi:mosque"
+            },
+            "fajrJamaah": {
+                "default": "mdi:mosque"
+            },
+            "sunrise": {
+                "default": "mdi:weather-sunny"
+            },
+            "ishraaq": {
+                "default": "mdi:weather-sunny"
+            },
+            "dhuhrAthan": {
+                "default": "mdi:mosque"
+            },
+            "dhuhrJamaah": {
+                "default": "mdi:mosque"
+            },
+            "jumuahTime1": {
+                "default": "mdi:mosque"
+            },
+            "jumuahTime2": {
+                "default": "mdi:mosque"
+            },
+            "jumuahTime3": {
+                "default": "mdi:mosque"
+            },
+            "asrShafi": {
+                "default": "mdi:weather-sunset-down"
+            },
+            "asrHanafi": {
+                "default": "mdi:weather-sunset-down"
+            },
+            "asrAthan": {
+                "default": "mdi:mosque"
+            },
+            "asrJamaah": {
+                "default": "mdi:mosque"
+            },
+            "sunset": {
+                "default": "mdi:weather-sunset"
+            },
+            "maghribAthan": {
+                "default": "mdi:mosque"
+            },
+            "maghribJamaah": {
+                "default": "mdi:mosque"
+            },
+            "eshaAthan": {
+                "default": "mdi:mosque"
+            },
+            "eshaJamaah": {
+                "default": "mdi:mosque"
+            },
+            "next_prayer": {
+                "default": "mdi:mosque"
+            },
+            "recommended": {
+                "default": "mdi:mosque"
+            }
+        }
+    }
+}
