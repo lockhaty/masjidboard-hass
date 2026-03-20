@@ -1,0 +1,72 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "menu_options": {
+                    "add_masjid": "Add a masjid",
+                    "preferences": "Set up preferences"
+                }
+            },
+            "add_masjid": {
+                "description": "Enter the masjid ID from masjidboardlive.com.\n\nYou can find it by visiting https://masjidboardlive.com/findmasjid and searching for your masjid. The ID is the slug in the URL, e.g. **marlboro-jaame**.\n\nYou can also paste the full board URL.",
+                "data": {
+                    "masjid_id": "Masjid ID or URL"
+                }
+            },
+            "preferences": {
+                "description": "This will create a preferences entry where you can configure your preferred masjid, per-salaah settings, TTS pronunciations, and device tracker fallback.\n\n**Using the Automation Blueprint:**\nTo receive prayer reminders, create an automation using the included blueprint:\n1. Go to **Settings \u2192 Automations \u2192 Create Automation \u2192 Use Blueprint**\n2. Select **MasjidBoard Prayer Reminder**\n3. Choose your notification method (TTS, Mobile App, or Both)\n4. Configure your speaker entity and/or mobile notification service\n\nThe blueprint fires on the `masjidboard_prayer_reminder` event and exposes these template variables: `prayer`, `masjid_name`, `prayer_time`, `leave_by`, `travel_time`, `tts_prayer`, `tts_masjid_name`, and `is_fallback`."
+            }
+        },
+        "error": {
+            "connection": "Unable to connect to MasjidBoard Live.",
+            "not_found": "Masjid not found. Check the ID and try again.",
+            "unknown": "Unknown error occurred."
+        },
+        "abort": {
+            "already_configured": "This masjid is already configured.",
+            "preferences_already_configured": "Preferences are already configured. Use the options flow to change them."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "friendly_name": "Friendly name",
+                    "tts_name": "TTS pronunciation name",
+                    "travel_time": "Travel time (minutes)",
+                    "announcements_enabled": "Enable prayer announcements",
+                    "preferred_masjid": "Preferred masjid",
+                    "device_tracker": "Device tracker",
+                    "fajr_preference": "Fajr",
+                    "dhuhr_preference": "Dhuhr",
+                    "asr_preference": "Asr",
+                    "maghrib_preference": "Maghrib",
+                    "esha_preference": "Esha",
+                    "tts_fajr": "Fajr TTS pronunciation",
+                    "tts_dhuhr": "Dhuhr TTS pronunciation",
+                    "tts_asr": "Asr TTS pronunciation",
+                    "tts_maghrib": "Maghrib TTS pronunciation",
+                    "tts_esha": "Esha TTS pronunciation"
+                },
+                "data_description": {
+                    "friendly_name": "An optional display name for this masjid. Used in sensors and notifications instead of the name from MasjidBoard Live.",
+                    "tts_name": "An optional name for text-to-speech announcements. Use this if your TTS engine mispronounces the masjid name (e.g. 'Musjid Al Falah' instead of 'Masjid Al-Falah'). Falls back to the friendly name, then the original name.",
+                    "travel_time": "How many minutes before jamaah you need to leave.",
+                    "announcements_enabled": "When disabled, this masjid will not trigger prayer reminders.",
+                    "preferred_masjid": "The default masjid to use when a salaah is set to 'Preferred masjid'.",
+                    "device_tracker": "Optional: if set and you're still home when a prayer's jamaah starts, a fallback reminder will be sent for the next masjid with a later jamaah time for the same prayer.",
+                    "fajr_preference": "Which masjid to go to for Fajr. Pick a specific masjid to override the preferred.",
+                    "dhuhr_preference": "Which masjid to go to for Dhuhr. Pick a specific masjid to override the preferred.",
+                    "asr_preference": "Which masjid to go to for Asr. Pick a specific masjid to override the preferred.",
+                    "maghrib_preference": "Which masjid to go to for Maghrib. Pick a specific masjid to override the preferred.",
+                    "esha_preference": "Which masjid to go to for Esha. Pick a specific masjid to override the preferred.",
+                    "tts_fajr": "How your TTS engine should pronounce 'Fajr'. Try 'Fudger' if the default sounds wrong.",
+                    "tts_dhuhr": "How your TTS engine should pronounce 'Dhuhr'. Try 'Zohr' or 'Duhr'.",
+                    "tts_asr": "How your TTS engine should pronounce 'Asr'. Try 'Usser' if needed.",
+                    "tts_maghrib": "How your TTS engine should pronounce 'Maghrib'. Try 'Mughrib' or 'Mugrib'.",
+                    "tts_esha": "How your TTS engine should pronounce 'Esha'. Try 'Isha' or 'Ishaa'."
+                }
+            }
+        }
+    }
+}

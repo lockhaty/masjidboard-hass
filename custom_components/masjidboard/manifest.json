@@ -1,0 +1,12 @@
+{
+  "domain": "masjidboard",
+  "name": "MasjidBoard Live",
+  "codeowners": [
+    "@lockhaty"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/lockhaty/masjidboard-hass",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/lockhaty/masjidboard-hass/issues",
+  "version": "1.0.1"
+}

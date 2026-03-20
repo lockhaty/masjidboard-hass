@@ -1,0 +1,184 @@
+blueprint:
+  name: MasjidBoard Prayer Reminder
+  description: >
+    Get notified when it's time to leave for prayer using TTS speaker
+    announcements, mobile app push notifications, or both. Triggers on
+    the masjidboard_prayer_reminder event fired by the MasjidBoard
+    integration based on your configured travel time.
+
+    Available template variables:
+    {{ prayer }} — prayer name (e.g. Fajr),
+    {{ masjid_name }} — masjid display name,
+    {{ prayer_time }} — jamaah time (HH:MM),
+    {{ leave_by }} — when to leave (HH:MM),
+    {{ travel_time }} — travel minutes,
+    {{ tts_prayer }} — TTS-friendly prayer name,
+    {{ tts_masjid_name }} — TTS-friendly masjid name,
+    {{ is_fallback }} — true if this is a device-tracker fallback reminder.
+  domain: automation
+  input:
+    notification_method:
+      name: Notification Method
+      description: Choose how you want to be notified.
+      default: "tts"
+      selector:
+        select:
+          options:
+            - label: TTS (Speaker)
+              value: tts
+            - label: Mobile App
+              value: mobile
+            - label: Both
+              value: both
+
+    # ── TTS settings ─────────────────────────────────
+    media_player:
+      name: Speaker
+      description: >
+        The media player to announce on.
+        Only used when Notification Method is TTS or Both.
+      default: ""
+      selector:
+        entity:
+          domain: media_player
+    language:
+      name: TTS Language
+      description: The language code for TTS announcements.
+      default: "en-ca"
+      selector:
+        text: {}
+    tts_message:
+      name: TTS Message
+      description: >
+        The message to announce over speakers. Use {{ tts_prayer }} and
+        {{ tts_masjid_name }} for TTS-friendly pronunciations, or
+        {{ prayer }} and {{ masjid_name }} for the original names.
+        Other variables: {{ prayer_time }}, {{ leave_by }}, {{ travel_time }},
+        {{ is_fallback }}.
+      default: >-
+        It's time to leave for {{ tts_prayer }}.
+        {{ tts_prayer }} jamaah is at {{ prayer_time }} at {{ tts_masjid_name }}.
+        Leave by {{ leave_by }}.
+      selector:
+        text:
+          multiline: true
+    announcement_volume:
+      name: Announcement Volume
+      description: >
+        Set the speaker volume for the announcement (1-100%).
+        Leave at 0 to keep the current volume.
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 1
+          unit_of_measurement: "%"
+          mode: slider
+
+    # ── Mobile App settings ──────────────────────────
+    notify_service:
+      name: Mobile Notification Service
+      description: >
+        The notify service for your mobile device
+        (e.g., notify.mobile_app_iphone). Find yours in
+        Developer Tools > Services.
+        Only used when Notification Method is Mobile App or Both.
+      default: ""
+      selector:
+        text:
+    mobile_title:
+      name: Mobile Notification Title
+      description: >
+        Title for the push notification. Available variables:
+        {{ prayer }}, {{ masjid_name }}, {{ prayer_time }}, {{ leave_by }},
+        {{ travel_time }}, {{ is_fallback }}.
+      default: "{{ prayer }} Reminder"
+      selector:
+        text:
+    mobile_message:
+      name: Mobile Notification Message
+      description: >
+        Message body for the push notification. Available variables:
+        {{ prayer }}, {{ masjid_name }}, {{ prayer_time }}, {{ leave_by }},
+        {{ travel_time }}, {{ is_fallback }}.
+      default: >-
+        Time to leave for {{ prayer }}. Jamaah is at {{ prayer_time }}
+        at {{ masjid_name }}. Leave by {{ leave_by }}.
+      selector:
+        text:
+          multiline: true
+
+trigger:
+  - platform: event
+    event_type: masjidboard_prayer_reminder
+
+variables:
+  prayer: "{{ trigger.event.data.prayer }}"
+  masjid_name: "{{ trigger.event.data.masjid_name }}"
+  prayer_time: "{{ trigger.event.data.prayer_time }}"
+  travel_time: "{{ trigger.event.data.travel_time }}"
+  leave_by: "{{ trigger.event.data.leave_by }}"
+  tts_prayer: "{{ trigger.event.data.tts_prayer }}"
+  tts_masjid_name: "{{ trigger.event.data.tts_masjid_name }}"
+  is_fallback: "{{ trigger.event.data.is_fallback | default(false) }}"
+  method: !input notification_method
+  speaker: !input media_player
+  volume: !input announcement_volume
+  notify_svc: !input notify_service
+
+action:
+  # ── TTS Announcement ──────────────────────────────
+  - if:
+      - condition: template
+        value_template: "{{ method in ['tts', 'both'] and speaker | length > 0 }}"
+    then:
+      - variables:
+          original_volume: "{{ state_attr(speaker, 'volume_level') | default(0.5, true) }}"
+
+      - if:
+          - condition: template
+            value_template: "{{ volume > 0 }}"
+        then:
+          - service: media_player.volume_set
+            target:
+              entity_id: !input media_player
+            data:
+              volume_level: "{{ volume / 100 }}"
+
+      - service: tts.google_say
+        data:
+          entity_id: !input media_player
+          message: !input tts_message
+          language: !input language
+
+      - if:
+          - condition: template
+            value_template: "{{ volume > 0 }}"
+        then:
+          - delay:
+              seconds: 1
+          - wait_for_trigger:
+              - platform: state
+                entity_id: !input media_player
+                from: "playing"
+            timeout:
+              minutes: 2
+            continue_on_timeout: true
+          - service: media_player.volume_set
+            target:
+              entity_id: !input media_player
+            data:
+              volume_level: "{{ original_volume }}"
+
+  # ── Mobile App Notification ────────────────────────
+  - if:
+      - condition: template
+        value_template: "{{ method in ['mobile', 'both'] and notify_svc | length > 0 }}"
+    then:
+      - service: "{{ notify_svc }}"
+        data:
+          title: !input mobile_title
+          message: !input mobile_message
+
+mode: single
