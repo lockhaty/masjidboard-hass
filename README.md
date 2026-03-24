@@ -19,7 +19,7 @@ A Home Assistant custom integration that fetches prayer times from [MasjidBoard 
 1. Open HACS in your Home Assistant instance.
 2. Go to **Integrations** and click the three-dot menu.
 3. Select **Custom repositories**.
-4. Add `https://github.com/yusuff/masjidboard-hass` with category **Integration**.
+4. Add `https://github.com/lockhaty/masjidboard-hass` with category **Integration**.
 5. Search for "MasjidBoard Live" and install it.
 6. Restart Home Assistant.
 
