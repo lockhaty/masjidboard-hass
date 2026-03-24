@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from homeassistant.const import Platform
@@ -23,6 +24,9 @@ PLATFORMS: list[Platform] = [
     Platform.SENSOR,
 ]
 
+CARD_URL = "/masjidboard/masjidboard-prayer-times-card.js"
+CARD_DIR = Path(__file__).parent / "www"
+
 
 def _get_scheduler(hass: HomeAssistant) -> MasjidBoardScheduler:
     """Get or create the shared scheduler instance."""
@@ -37,6 +41,9 @@ async def async_setup_entry(
     entry: MasjidBoardConfigEntry,
 ) -> bool:
     """Set up MasjidBoard from a config entry."""
+    # Register the prayer times card frontend resource
+    _register_card(hass)
+
     if CONF_MASJID_ID not in entry.data:
         # Preferences entry — no coordinator needed, just set up sensors
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
@@ -99,6 +106,21 @@ async def async_reload_entry(
 ) -> None:
     """Reload config entry."""
     await hass.config_entries.async_reload(entry.entry_id)
+
+
+def _register_card(hass: HomeAssistant) -> None:
+    """Register the prayer times card static path."""
+    domain_data = hass.data.setdefault(DOMAIN, {})
+    if domain_data.get("card_registered"):
+        return
+    domain_data["card_registered"] = True
+
+    hass.http.register_static_path(
+        CARD_URL,
+        str(CARD_DIR / "masjidboard-prayer-times-card.js"),
+        cache_headers=True,
+    )
+    LOGGER.debug("Registered MasjidBoard prayer times card at %s", CARD_URL)
 
 
 async def _async_preferences_updated(
