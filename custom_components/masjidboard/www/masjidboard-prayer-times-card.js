@@ -76,6 +76,7 @@ class MasjidBoardPrayerTimesCard extends HTMLElement {
       show_extra: true,
       highlight_next: true,
       show_jumuah: "friday",
+      theme: "vibrant",
       ...config,
     };
   }
@@ -150,9 +151,14 @@ class MasjidBoardPrayerTimesCard extends HTMLElement {
     return `${minutes}m`;
   }
 
+  _isSubtle() {
+    return this._config.theme === "subtle";
+  }
+
   _render() {
     if (!this._hass || !this._config.entity) return;
 
+    const subtle = this._isSubtle();
     const entities = this._getDeviceEntities();
     const nextPrayer = this._getNextPrayerName();
     const nextPrayerTime = this._getNextPrayerTime();
@@ -459,6 +465,81 @@ class MasjidBoardPrayerTimesCard extends HTMLElement {
           font-variant-numeric: tabular-nums;
         }
 
+        /* Subtle theme overrides */
+        .subtle .header {
+          background: var(--card-bg);
+          color: var(--primary-text);
+          border-bottom: 1px solid var(--divider);
+        }
+
+        .subtle .header::before,
+        .subtle .header::after {
+          display: none;
+        }
+
+        .subtle .mosque-icon {
+          color: var(--secondary-text);
+        }
+
+        .subtle .header-text .subtitle {
+          color: var(--secondary-text);
+          opacity: 1;
+        }
+
+        .subtle .next-prayer-banner {
+          background: var(--divider);
+          backdrop-filter: none;
+          color: var(--primary-text);
+        }
+
+        .subtle .next-label {
+          opacity: 1;
+          color: var(--secondary-text);
+        }
+
+        .subtle .next-countdown {
+          opacity: 1;
+          color: var(--secondary-text);
+        }
+
+        .subtle .prayer-row.active {
+          background: var(--divider);
+          color: var(--primary-text);
+          box-shadow: none;
+        }
+
+        .subtle .prayer-row.active .prayer-name {
+          color: var(--primary-text);
+        }
+
+        .subtle .prayer-row.active .time-athan {
+          color: var(--secondary-text);
+        }
+
+        .subtle .prayer-row.active .time-jamaah {
+          color: var(--primary-text);
+        }
+
+        .subtle .prayer-row.active .label {
+          color: var(--secondary-text);
+        }
+
+        .subtle .prayer-row.active .prayer-icon-wrapper {
+          background: rgba(128,128,128,0.15);
+        }
+
+        .subtle .prayer-row:nth-child(1) .prayer-icon-wrapper,
+        .subtle .prayer-row:nth-child(2) .prayer-icon-wrapper,
+        .subtle .prayer-row:nth-child(3) .prayer-icon-wrapper,
+        .subtle .prayer-row:nth-child(4) .prayer-icon-wrapper,
+        .subtle .prayer-row:nth-child(5) .prayer-icon-wrapper {
+          background: rgba(128,128,128,0.1);
+        }
+
+        .subtle .jumuah-chip {
+          background: var(--divider);
+        }
+
         .no-entity {
           padding: 24px;
           text-align: center;
@@ -477,7 +558,7 @@ class MasjidBoardPrayerTimesCard extends HTMLElement {
         }
       </style>
 
-      <ha-card>
+      <ha-card class="${subtle ? "subtle" : ""}">
         ${this._hass.states[this._config.entity] ? `
           ${this._config.show_header !== false ? `
             <div class="header">
@@ -714,6 +795,13 @@ class MasjidBoardPrayerTimesCardEditor extends HTMLElement {
           <label for="highlight_next">Highlight next prayer</label>
         </div>
         <div class="row">
+          <label>Style</label>
+          <select id="theme">
+            <option value="vibrant" ${(this._config.theme || "vibrant") === "vibrant" ? "selected" : ""}>Vibrant</option>
+            <option value="subtle" ${this._config.theme === "subtle" ? "selected" : ""}>Subtle</option>
+          </select>
+        </div>
+        <div class="row">
           <label>Show Jumuah times</label>
           <select id="show_jumuah">
             <option value="friday" ${(this._config.show_jumuah || "friday") === "friday" ? "selected" : ""}>Fridays only</option>
@@ -726,6 +814,10 @@ class MasjidBoardPrayerTimesCardEditor extends HTMLElement {
 
     this.shadowRoot.getElementById("entity").addEventListener("change", (e) => {
       this._updateConfig("entity", e.target.value);
+    });
+
+    this.shadowRoot.getElementById("theme").addEventListener("change", (e) => {
+      this._updateConfig("theme", e.target.value);
     });
 
     this.shadowRoot.getElementById("show_jumuah").addEventListener("change", (e) => {
