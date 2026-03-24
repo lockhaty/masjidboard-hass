@@ -4,7 +4,13 @@
  * from the MasjidBoard integration.
  */
 
-const CARD_VERSION = "1.0.0";
+const CARD_VERSION = "1.1.0";
+
+const JUMUAH_KEYS = [
+  { key: "jumuah_1", label: "Jumuah 1" },
+  { key: "jumuah_2", label: "Jumuah 2" },
+  { key: "jumuah_3", label: "Jumuah 3" },
+];
 
 const PRAYERS = [
   {
@@ -69,6 +75,7 @@ class MasjidBoardPrayerTimesCard extends HTMLElement {
       show_athan: true,
       show_extra: true,
       highlight_next: true,
+      show_jumuah: "friday",
       ...config,
     };
   }
@@ -151,6 +158,16 @@ class MasjidBoardPrayerTimesCard extends HTMLElement {
     const nextPrayerTime = this._getNextPrayerTime();
     const masjidName = this._getMasjidName();
     const timeUntil = this._getTimeUntil(nextPrayerTime);
+
+    // Jumuah times — only those with valid values
+    const isFriday = new Date().getDay() === 5;
+    const showJumuah = this._config.show_jumuah === "always" ||
+      (this._config.show_jumuah !== "never" && isFriday);
+    const jumuahTimes = showJumuah
+      ? JUMUAH_KEYS
+          .map((j) => ({ label: j.label, time: entities[j.key]?.state }))
+          .filter((j) => j.time && j.time !== "unavailable" && j.time !== "unknown" && j.time.trim() !== "" && j.time.trim() !== "&nbsp;")
+      : [];
 
     // Extra times
     const sehriEnds = entities["sehri_ends"]?.state;
@@ -411,6 +428,37 @@ class MasjidBoardPrayerTimesCard extends HTMLElement {
           font-variant-numeric: tabular-nums;
         }
 
+        .jumuah-section {
+          border-top: 1px solid var(--divider);
+          padding: 10px 16px 12px;
+        }
+
+        .jumuah-header {
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: var(--secondary-text);
+          margin-bottom: 8px;
+          padding-left: 8px;
+        }
+
+        .jumuah-times {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+          padding-left: 8px;
+        }
+
+        .jumuah-chip {
+          background: rgba(46, 125, 50, 0.1);
+          color: var(--primary-text);
+          padding: 6px 14px;
+          border-radius: 20px;
+          font-size: 13px;
+          font-weight: 500;
+          font-variant-numeric: tabular-nums;
+        }
+
         .no-entity {
           padding: 24px;
           text-align: center;
@@ -489,6 +537,17 @@ class MasjidBoardPrayerTimesCard extends HTMLElement {
               `;
             }).join("")}
           </div>
+
+          ${jumuahTimes.length > 0 ? `
+            <div class="jumuah-section">
+              <div class="jumuah-header">Jumuah</div>
+              <div class="jumuah-times">
+                ${jumuahTimes.map((j) => `
+                  <div class="jumuah-chip">${this._formatTime(j.time)}</div>
+                `).join("")}
+              </div>
+            </div>
+          ` : ""}
 
           ${this._config.show_extra !== false && (sehriEnds || sunrise || sunset) ? `
             <div class="extras">
@@ -654,11 +713,23 @@ class MasjidBoardPrayerTimesCardEditor extends HTMLElement {
           <input type="checkbox" id="highlight_next" ${this._config.highlight_next !== false ? "checked" : ""}>
           <label for="highlight_next">Highlight next prayer</label>
         </div>
+        <div class="row">
+          <label>Show Jumuah times</label>
+          <select id="show_jumuah">
+            <option value="friday" ${(this._config.show_jumuah || "friday") === "friday" ? "selected" : ""}>Fridays only</option>
+            <option value="always" ${this._config.show_jumuah === "always" ? "selected" : ""}>Always</option>
+            <option value="never" ${this._config.show_jumuah === "never" ? "selected" : ""}>Never</option>
+          </select>
+        </div>
       </div>
     `;
 
     this.shadowRoot.getElementById("entity").addEventListener("change", (e) => {
       this._updateConfig("entity", e.target.value);
+    });
+
+    this.shadowRoot.getElementById("show_jumuah").addEventListener("change", (e) => {
+      this._updateConfig("show_jumuah", e.target.value);
     });
 
     for (const id of ["show_header", "show_athan", "show_extra", "highlight_next"]) {
