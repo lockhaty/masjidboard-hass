@@ -6,6 +6,7 @@ from datetime import timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.const import Platform
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -42,7 +43,7 @@ async def async_setup_entry(
 ) -> bool:
     """Set up MasjidBoard from a config entry."""
     # Register the prayer times card frontend resource
-    _register_card(hass)
+    await _register_card(hass)
 
     if CONF_MASJID_ID not in entry.data:
         # Preferences entry — no coordinator needed, just set up sensors
@@ -108,18 +109,20 @@ async def async_reload_entry(
     await hass.config_entries.async_reload(entry.entry_id)
 
 
-def _register_card(hass: HomeAssistant) -> None:
+async def _register_card(hass: HomeAssistant) -> None:
     """Register the prayer times card static path."""
     domain_data = hass.data.setdefault(DOMAIN, {})
     if domain_data.get("card_registered"):
         return
     domain_data["card_registered"] = True
 
-    hass.http.register_static_path(
-        CARD_URL,
-        str(CARD_DIR / "masjidboard-prayer-times-card.js"),
-        cache_headers=True,
-    )
+    await hass.http.async_register_static_paths([
+        StaticPathConfig(
+            CARD_URL,
+            str(CARD_DIR / "masjidboard-prayer-times-card.js"),
+            cache_headers=True,
+        )
+    ])
     LOGGER.debug("Registered MasjidBoard prayer times card at %s", CARD_URL)
 
 
