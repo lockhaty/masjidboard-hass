@@ -1,13 +1,13 @@
 {
     "entity": {
         "sensor": {
-            "sehriEnds": {
+            "sehri_ends": {
                 "default": "mdi:food-halal"
             },
-            "fajrAthan": {
+            "fajr_athan": {
                 "default": "mdi:mosque"
             },
-            "fajrJamaah": {
+            "fajr_jamaah": {
                 "default": "mdi:mosque"
             },
             "sunrise": {
@@ -16,46 +16,46 @@
             "ishraaq": {
                 "default": "mdi:weather-sunny"
             },
-            "dhuhrAthan": {
+            "dhuhr_athan": {
                 "default": "mdi:mosque"
             },
-            "dhuhrJamaah": {
+            "dhuhr_jamaah": {
                 "default": "mdi:mosque"
             },
-            "jumuahTime1": {
+            "jumuah_time_1": {
                 "default": "mdi:mosque"
             },
-            "jumuahTime2": {
+            "jumuah_time_2": {
                 "default": "mdi:mosque"
             },
-            "jumuahTime3": {
+            "jumuah_time_3": {
                 "default": "mdi:mosque"
             },
-            "asrShafi": {
+            "asr_shafi": {
                 "default": "mdi:weather-sunset-down"
             },
-            "asrHanafi": {
+            "asr_hanafi": {
                 "default": "mdi:weather-sunset-down"
             },
-            "asrAthan": {
+            "asr_athan": {
                 "default": "mdi:mosque"
             },
-            "asrJamaah": {
+            "asr_jamaah": {
                 "default": "mdi:mosque"
             },
             "sunset": {
                 "default": "mdi:weather-sunset"
             },
-            "maghribAthan": {
+            "maghrib_athan": {
                 "default": "mdi:mosque"
             },
-            "maghribJamaah": {
+            "maghrib_jamaah": {
                 "default": "mdi:mosque"
             },
-            "eshaAthan": {
+            "esha_athan": {
                 "default": "mdi:mosque"
             },
-            "eshaJamaah": {
+            "esha_jamaah": {
                 "default": "mdi:mosque"
             },
             "next_prayer": {

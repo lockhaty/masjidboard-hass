@@ -34,102 +34,121 @@ SENSOR_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
     SensorEntityDescription(
         key="sehriEnds",
         name="Sehri Ends",
+        translation_key="sehri_ends",
         icon="mdi:food-halal",
     ),
     SensorEntityDescription(
         key="fajrAthan",
         name="Fajr Athan",
+        translation_key="fajr_athan",
         icon="mdi:mosque",
     ),
     SensorEntityDescription(
         key="fajrJamaah",
         name="Fajr Jamaah",
+        translation_key="fajr_jamaah",
         icon="mdi:mosque",
     ),
     # Morning
     SensorEntityDescription(
         key="sunrise",
         name="Sunrise",
+        translation_key="sunrise",
         icon="mdi:weather-sunny",
     ),
     SensorEntityDescription(
         key="ishraaq",
         name="Ishraaq",
+        translation_key="ishraaq",
         icon="mdi:weather-sunny",
     ),
     # Dhuhr
     SensorEntityDescription(
         key="dhuhrAthan",
         name="Dhuhr Athan",
+        translation_key="dhuhr_athan",
         icon="mdi:mosque",
     ),
     SensorEntityDescription(
         key="dhuhrJamaah",
         name="Dhuhr Jamaah",
+        translation_key="dhuhr_jamaah",
         icon="mdi:mosque",
     ),
     # Jumuah
     SensorEntityDescription(
         key="jumuahTime1",
         name="Jumuah 1",
+        translation_key="jumuah_time_1",
         icon="mdi:mosque",
     ),
     SensorEntityDescription(
         key="jumuahTime2",
         name="Jumuah 2",
+        translation_key="jumuah_time_2",
         icon="mdi:mosque",
     ),
     SensorEntityDescription(
         key="jumuahTime3",
         name="Jumuah 3",
+        translation_key="jumuah_time_3",
         icon="mdi:mosque",
     ),
     # Asr
     SensorEntityDescription(
         key="asrShafi",
         name="Asr Start (Shafi)",
+        translation_key="asr_shafi",
         icon="mdi:weather-sunset-down",
     ),
     SensorEntityDescription(
         key="asrHanafi",
         name="Asr Start (Hanafi)",
+        translation_key="asr_hanafi",
         icon="mdi:weather-sunset-down",
     ),
     SensorEntityDescription(
         key="asrAthan",
         name="Asr Athan",
+        translation_key="asr_athan",
         icon="mdi:mosque",
     ),
     SensorEntityDescription(
         key="asrJamaah",
         name="Asr Jamaah",
+        translation_key="asr_jamaah",
         icon="mdi:mosque",
     ),
     # Maghrib
     SensorEntityDescription(
         key="sunset",
         name="Sunset",
+        translation_key="sunset",
         icon="mdi:weather-sunset",
     ),
     SensorEntityDescription(
         key="maghribAthan",
         name="Maghrib Athan",
+        translation_key="maghrib_athan",
         icon="mdi:mosque",
     ),
     SensorEntityDescription(
         key="maghribJamaah",
         name="Maghrib Jamaah",
+        translation_key="maghrib_jamaah",
         icon="mdi:mosque",
     ),
     # Esha
     SensorEntityDescription(
         key="eshaAthan",
         name="Esha Athan",
+        translation_key="esha_athan",
         icon="mdi:mosque",
     ),
     SensorEntityDescription(
         key="eshaJamaah",
         name="Esha Jamaah",
+        translation_key="esha_jamaah",
         icon="mdi:mosque",
     ),
 )
@@ -202,6 +221,7 @@ class MasjidBoardNextPrayerSensor(MasjidBoardEntity, SensorEntity):
     """Sensor showing the next upcoming prayer for this masjid."""
 
     _attr_name = "Next Prayer"
+    _attr_translation_key = "next_prayer"
     _attr_icon = "mdi:mosque"
 
     def __init__(self, coordinator: MasjidBoardCoordinator) -> None:
@@ -240,6 +260,7 @@ class RecommendedMosqueSensor(SensorEntity):
     """Cross-masjid sensor showing the recommended mosque for the next prayer."""
 
     _attr_name = "Recommended Mosque"
+    _attr_translation_key = "recommended"
     _attr_icon = "mdi:mosque"
     _attr_has_entity_name = True
 

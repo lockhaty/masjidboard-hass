@@ -112,6 +112,10 @@ class MasjidBoardFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     ),
                 },
             ),
+            description_placeholders={
+                "masjidboardlive_url": "masjidboardlive.com",
+                "find_masjid_url": "https://masjidboardlive.com/findmasjid",
+            },
             errors=_errors,
         )
 

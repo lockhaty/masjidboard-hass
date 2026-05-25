@@ -1,6 +1,7 @@
 {
   "domain": "masjidboard",
   "name": "MasjidBoard Live",
+  "description": "Fetches prayer times from MasjidBoard Live for your local masjid.",
   "codeowners": [
     "@lockhaty"
   ],

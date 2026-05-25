@@ -8,7 +8,7 @@
                 }
             },
             "add_masjid": {
-                "description": "Enter the masjid ID from masjidboardlive.com.\n\nYou can find it by visiting https://masjidboardlive.com/findmasjid and searching for your masjid. The ID is the slug in the URL, e.g. **marlboro-jaame**.\n\nYou can also paste the full board URL.",
+                "description": "Enter the masjid ID from {masjidboardlive_url}.\n\nYou can find it by visiting {find_masjid_url} and searching for your masjid. The ID is the slug in the URL, e.g. **marlboro-jaame**.\n\nYou can also paste the full board URL.",
                 "data": {
                     "masjid_id": "Masjid ID or URL"
                 }
