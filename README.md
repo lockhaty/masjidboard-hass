@@ -52,6 +52,50 @@ The integration creates sensors for the following prayer times:
 | Maghrib Athan / Jamaah | Maghrib athan and congregation times |
 | Esha Athan / Jamaah | Esha athan and congregation times |
 
+## Prayer Times Card
+
+The integration includes a custom Lovelace card for displaying salaah times visually.
+
+### Setup
+
+Add the card as a Lovelace resource:
+
+1. Go to **Settings** > **Dashboards** > **Resources** (three-dot menu).
+2. Click **Add Resource**.
+3. Enter URL: `/masjidboard/masjidboard-prayer-times-card.js`
+4. Select **JavaScript Module** and click **Create**.
+
+### Usage
+
+Add the card to your dashboard:
+
+```yaml
+type: custom:masjidboard-prayer-times-card
+entity: sensor.<your_masjid>_next_prayer
+```
+
+You can also add it via the visual editor — search for **MasjidBoard Prayer Times** in the card picker.
+
+### Options
+
+| Option | Default | Description |
+|---|---|---|
+| `entity` | *required* | The `next_prayer` sensor entity for your masjid |
+| `show_header` | `true` | Show the masjid name header and next prayer banner |
+| `show_athan` | `true` | Show athan times alongside jamaah times |
+| `show_extra` | `true` | Show extra times (Sehri, Sunrise, Ishraaq, Sunset) |
+| `highlight_next` | `true` | Highlight the next upcoming prayer row |
+
+### Example
+
+```yaml
+type: custom:masjidboard-prayer-times-card
+entity: sensor.my_local_masjid_next_prayer
+show_athan: true
+show_extra: true
+highlight_next: true
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
