@@ -5,9 +5,9 @@
     "@lockhaty"
   ],
   "config_flow": true,
+  "dependencies": ["http"],
   "documentation": "https://github.com/lockhaty/masjidboard-hass",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/lockhaty/masjidboard-hass/issues",
-  "version": "1.0.2",
-  "dependencies": ["http"]
+  "version": "1.0.2"
 }
